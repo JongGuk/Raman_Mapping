@@ -16,6 +16,14 @@ class RamanGUI:
         filemenu.add_separator()
         filemenu.add_command(label="Exit", command=self.root.quit)
 
+        self.btn = Button(self.root, text="OK")
+        self.btn.pack()
+        
+        x_values = [1, 2, 3, 4, 5]
+        y_values = [3, 3, 2, 6, 4]
+        plt.plot(x_values, y_values)
+        plt.show()
+
         self.text = Text(self.root)
         self.text.pack()
 
@@ -28,6 +36,7 @@ class RamanGUI:
         data = open(filename,'rt')
         self.text.delete('1.0', END)
         self.text.insert(END,data.read())
+
 
 # Load()
 
