@@ -1,12 +1,10 @@
 from tkinter import *
-from tkinter import filedialog
 import tkinter as tk
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from pandas import DataFrame
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
 
 class RamanGUI:
     def __init__(self):
@@ -30,45 +28,40 @@ class RamanGUI:
         self.root.mainloop()
 
     def Load(self):
-        filename = filedialog.askopenfilename(initialdir="/", title="Selecte raw file")
+        filename = tk.filedialog.askopenfilename(initialdir="/", title="Selecte raw file") # tkinter 로 파일 불러오기
         print(filename)
-        data = pd.read_csv(filename)
+        data = pd.read_csv(filename) # pandas 로 csv 파일을 읽어옴
         print(data)
-        df = DataFrame(data) # data 로부터 데이터 프레임 만듦
-        df1=df.iloc[[60],3:1027]
+        df = DataFrame(data) # 불러온 data 을 데이터프레임 형식으로 만듦
+        df1=df.iloc[[60],3:1027] # 만든 데이터프레임 중 60번째 행 전체 스펙트럼 (3~1027)을 자름
         print(df1)
-        df1T=df1.T
+        df1T=df1.T # Transpose
         
-        root= tk.Tk() # tkinter 로 창 띄우기
+        root= tk.Tk() # tkinter 로 새 창 띄우기
 
-        figure1 = plt.Figure(figsize=(5,6), dpi=100) # 그래프 띄울 창 사이즈
-        ax = figure1.add_subplot(111) # 그래프 plot 및 x,y축 범위 조절 (범위 지정 생략하면 auto)
-        ax.set_title('Raman spectrum at selected point')
+        # Graph 1
+        figure1 = plt.Figure(figsize=(5,4), dpi=100) # 그래프 띄울 창 사이즈
+        ax1 = figure1.add_subplot(111) # 그래프 plot 및 x,y축 범위 조절 (범위 지정 생략하면 auto)
+        ax1.set_title('Raman spectrum at selected point')
 
-        line = FigureCanvasTkAgg(figure1, root) # Figure 그려서 root에 표시 
-        line.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH) # pack 에서 그래프를 좌측정렬/채우기 등 설정
+        line = FigureCanvasTkAgg(figure1, root) # Figure1 그려서 root에 표시 
+        line.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH) # tkinter 설정에서 그래프를 어떻게 표시할 지 (좌측정렬/채우기 등, pack
 
-        #df.plot(~~~) # df.행이름 으로 특정 행 선택 가능
         df1T.plot(kind='line', ax=ax, color='r', marker='*', fontsize=10)
         
+        # Graph 2
         Rdf1T=df1T['533.1':'533.7']
-        
-        figure2 = plt.Figure(figsize=(5,6), dpi=100) # 그래프 띄울 창 사이즈
+        figure2 = plt.Figure(figsize=(5,4), dpi=100)
         ax2 = figure2.add_subplot(111)
+        ax2.set_title('Specific Range (533.1 ~ 533.7)')
 
-        line = FigureCanvasTkAgg(figure2, root) # Figure 그려서 root에 표시 
-        line.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH) # pack 에서 그래프를 좌측정렬/채우기 등 설정
+        line2 = FigureCanvasTkAgg(figure2, root) # Figure2 그려서 root에 표시 
+        line2.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
 
         Rdf1T.plot(kind='line', ax=ax2, color='b', marker='o', fontsize=10)
 
-
-
-
         root.mainloop() #새로고침 
-
 
     # def Sel_pt(self):
 
 # Load()
-
-RamanGUI()
