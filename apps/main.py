@@ -1,15 +1,15 @@
-from tkinter import *
 import tkinter as tk
+import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
+from tkinter import *
 from pandas import DataFrame
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class RamanGUI:
     def __init__(self):
         self.root = Tk()
-        self.root.title("Raman Mapping")
+        self.root.title("Load Data")
 
         menubar = Menu(self.root)        
         filemenu = Menu(menubar, tearoff=0)
@@ -21,9 +21,6 @@ class RamanGUI:
         self.btn = Button(self.root, text="OK")
         self.btn.pack()
         
-        # plt.plot(x_values, y_values)
-        # plt.show()
-
         self.root.config(menu=menubar)
         self.root.mainloop()
 
@@ -33,11 +30,12 @@ class RamanGUI:
         data = pd.read_csv(filename) # pandas 로 csv 파일을 읽어옴
         print(data)
         df = DataFrame(data) # 불러온 data 을 데이터프레임 형식으로 만듦
-        df1=df.iloc[[60],3:1027] # 만든 데이터프레임 중 60번째 행 전체 스펙트럼 (3~1027)을 자름
+        df1=df.iloc[[60],3:1027] # 만든 데이터프레임 중 60번째 행 전체 스펙트럼 (3~1027)을 자름 (60 대신 나중에 input 받을 예정)
         print(df1)
         df1T=df1.T # Transpose
         
         root= tk.Tk() # tkinter 로 새 창 띄우기
+        root.title("Raman Mapping")
 
         # Graph 1
         figure1 = plt.Figure(figsize=(5,4), dpi=100) # 그래프 띄울 창 사이즈
@@ -47,10 +45,12 @@ class RamanGUI:
         line = FigureCanvasTkAgg(figure1, root) # Figure1 그려서 root에 표시 
         line.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH) # tkinter 설정에서 그래프를 어떻게 표시할 지 (좌측정렬/채우기 등, pack
 
-        df1T.plot(kind='line', ax=ax, color='r', marker='*', fontsize=10)
+        df1T.plot(kind='line', ax=ax1, color='r', marker='*', fontsize=10)
         
         # Graph 2
-        Rdf1T=df1T['533.1':'533.7']
+        Rdf1T=df1T['533.1':'533.7'] # 데이터 범위 설정 (나중에 input 받을 예정)
+        print(Rdf1T)
+
         figure2 = plt.Figure(figsize=(5,4), dpi=100)
         ax2 = figure2.add_subplot(111)
         ax2.set_title('Specific Range (533.1 ~ 533.7)')
@@ -64,4 +64,4 @@ class RamanGUI:
 
     # def Sel_pt(self):
 
-# Load()
+RamanGUI()
